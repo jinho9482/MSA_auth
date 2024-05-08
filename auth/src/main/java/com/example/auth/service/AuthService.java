@@ -7,5 +7,5 @@ import com.example.auth.domain.response.SignInResponse;
 public interface AuthService {
     void insertUser(SignUpRequest signUpRequest);
 
-    SignInResponse signIn(SignInRequest request);
+//    SignInResponse signIn(SignInRequest request);
 }

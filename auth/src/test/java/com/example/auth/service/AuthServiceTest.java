@@ -24,6 +24,21 @@ class AuthServiceTest {
     @Autowired
     private UserRepository userRepository;
 
+    @Nested
+    class signIn {
+        @Test
+        void success() {
+
+        }
+
+        @Test
+        void fail() {}
+    }
+
+
+
+
+
     @Nested // 하나로 묶어서 테스트하는 것
     class signUp {
         @Test
@@ -47,7 +62,7 @@ class AuthServiceTest {
         @Test
         void emailAlreadyExist() {
             // given
-            SignUpRequest request = new SignUpRequest("wlshzz@naver.com",
+            SignUpRequest request = new SignUpRequest("jinho@naver.com",
                     "1234",
                     "머리좀긴크리링",
                     LocalDate.of(2024, 5, 8),
