@@ -36,4 +36,8 @@ public class AuthServiceImpl implements AuthService {
         userRepository.save(user);
     }
 
+    @Override
+    public SignInResponse signIn(SignInRequest request) {
+        return null;
+    }
 }

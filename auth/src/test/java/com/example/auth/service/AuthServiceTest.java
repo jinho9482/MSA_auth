@@ -2,12 +2,15 @@ package com.example.auth.service;
 
 import com.example.auth.domain.entity.User;
 import com.example.auth.domain.entity.UserRepository;
+import com.example.auth.domain.request.SignInRequest;
 import com.example.auth.domain.request.SignUpRequest;
+import com.example.auth.domain.response.SignInResponse;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -24,11 +27,29 @@ class AuthServiceTest {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Nested
     class signIn {
         @Test
         void success() {
+            // given
+            User init = User.builder().email("wlshzz@naver.com")
+                    .password(passwordEncoder.encode("1234"))
+                    .nickname("wlshzz")
+                    .gender("male")
+                    .birthday(LocalDate.of(1994, 6, 20))
+                    .build();
+            userRepository.save(init);
+            SignInRequest request = new SignInRequest("wlshzz@naver.com", "1234");
+            // when
+            SignInResponse res = authService.signIn(request);
 
+            // then
+            assertNotNull(res.token());
+            assertEquals(3, res.token().split(".").length);
+            assertEquals("Bearer", res.tokenType());
         }
 
         @Test
@@ -69,7 +90,7 @@ class AuthServiceTest {
                     "male"
             );
 
-            userRepository.save(User.builder().email("wlshzz@naver.com").build());
+            userRepository.save(User.builder().email("jinho@naver.com").build());
             // when & then (데이터를 넣고 에러가 즉각 발생하기 때문에 같이 쓴다.)
             authService.insertUser(request);
             assertThrows(IllegalArgumentException.class, () -> {
