@@ -45,15 +45,44 @@ class AuthServiceTest {
             SignInRequest request = new SignInRequest("wlshzz@naver.com", "1234");
             // when
             SignInResponse res = authService.signIn(request);
-
             // then
             assertNotNull(res.token());
-            assertEquals(3, res.token().split(".").length);
+            assertEquals(3, res.token().split("\\.").length);
             assertEquals("Bearer", res.tokenType());
         }
 
         @Test
-        void fail() {}
+        void userNotFoundFail() {
+            // given
+            User init = User.builder().email("wlshzz@naver.com")
+                    .password(passwordEncoder.encode("1234"))
+                    .nickname("wlshzz")
+                    .gender("male")
+                    .birthday(LocalDate.of(1994, 6, 20))
+                    .build();
+            userRepository.save(init);
+            SignInRequest request = new SignInRequest("jinho@naver.com", "1234");
+
+            // when & then
+            assertThrows(IllegalArgumentException.class, () -> authService.signIn(request));
+        }
+
+        @Test
+        void passwordFail() {
+            // given
+            User init = User.builder().email("wlshzz@naver.com")
+                    .password(passwordEncoder.encode("1234"))
+                    .nickname("wlshzz")
+                    .gender("male")
+                    .birthday(LocalDate.of(1994, 6, 20))
+                    .build();
+            userRepository.save(init);
+            SignInRequest request = new SignInRequest("wlshzz@naver.com", "12549849");
+
+            // when & then
+            assertThrows(IllegalArgumentException.class, () -> authService.signIn(request));
+        }
+
     }
 
 
