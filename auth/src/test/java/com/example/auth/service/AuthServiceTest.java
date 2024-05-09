@@ -69,7 +69,7 @@ class AuthServiceTest {
                     "male"
             );
 
-            userRepository.save(User.builder().email("wlshzz@naver.com").build());
+//            userRepository.save(User.builder().email("wlshzz@naver.com").build());
             // when & then (데이터를 넣고 에러가 즉각 발생하기 때문에 같이 쓴다.)
             authService.insertUser(request);
             assertThrows(IllegalArgumentException.class, () -> {
