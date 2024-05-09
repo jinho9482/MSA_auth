@@ -15,7 +15,7 @@ class JwtUtilTest {
 
     private final String secret = "12jdasoifjpoij39205u23t20981fasdvsdfg52323";
 
-    private final JwtUtil jwtUtil = new JwtUtil(secret,1000 * 5L);
+    private final JwtUtil jwtUtil = new JwtUtil(secret,500L);
 
     @Test
     void generateToken() {
@@ -28,6 +28,7 @@ class JwtUtilTest {
         // then
         assertNotNull(token);
         assertEquals(3, token.split("\\.").length);
+        System.out.println(token);
 
     }
 
@@ -46,7 +47,7 @@ class JwtUtilTest {
         void expired() throws InterruptedException {
             String email = "wlshzz@naver.com";
             String token = jwtUtil.generateToken(email);
-            Thread.sleep(1000l);
+            Thread.sleep(1000);
             assertThrows(JwtException.class, () -> jwtUtil.getByEmailFromTokenAndValidate(token));
         }
     }

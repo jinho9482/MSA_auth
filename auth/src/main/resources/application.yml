@@ -8,8 +8,12 @@ spring:
     password: 1234
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
 
 jwt:
   secret: fjaisdpfjsadoifhsiodhvpashi390u190141333h487vvasdlvasdv
   expiration: 2592000000
+
+logging:
+  level:
+    org.springframework.security: trace

@@ -1,5 +1,6 @@
 package com.example.auth.service;
 
+import com.example.auth.exception.ExistingUserException;
 import com.example.auth.domain.entity.User;
 import com.example.auth.domain.entity.UserRepository;
 import com.example.auth.domain.request.SignInRequest;
@@ -64,7 +65,7 @@ class AuthServiceTest {
             SignInRequest request = new SignInRequest("jinho@naver.com", "1234");
 
             // when & then
-            assertThrows(IllegalArgumentException.class, () -> authService.signIn(request));
+            assertThrows(ExistingUserException.class, () -> authService.signIn(request));
         }
 
         @Test
@@ -112,19 +113,19 @@ class AuthServiceTest {
         @Test
         void emailAlreadyExist() {
             // given
-            SignUpRequest request = new SignUpRequest("jinho@naver.com",
+            SignUpRequest request = new SignUpRequest("jinho2@naver.com",
                     "1234",
                     "머리좀긴크리링",
                     LocalDate.of(2024, 5, 8),
                     "male"
             );
 
-            userRepository.save(User.builder().email("jinho@naver.com").build());
+//            userRepository.save(User.builder().email("jinho2@naver.com").build());
             // when & then (데이터를 넣고 에러가 즉각 발생하기 때문에 같이 쓴다.)
             authService.insertUser(request);
-            assertThrows(IllegalArgumentException.class, () -> {
-                authService.insertUser(request);
-            });
+            assertThrows(ExistingUserException.class, () ->
+                authService.insertUser(request)
+            );
 
         }
     }
